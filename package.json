@@ -1,0 +1,11 @@
+{
+  "name": "password-checker-ar",
+  "version": "1.0.0",
+  "description": "فاحص قوة كلمة المرور: أداة تعليمية عربية تشتغل كلها داخل المتصفح",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "license": "MIT",
+  "author": "Hassam Hussain Khada Bakhsa"
+}

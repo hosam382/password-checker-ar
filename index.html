@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>فاحص قوة كلمة المرور</title>
+<meta name="description" content="أداة تعليمية تفحص قوة كلمة المرور وتشرح لك ليش هي ضعيفة: كلمات مشهورة، تواريخ، أرقام جوال، وكلمات عربية مكتوبة والكيبورد إنجليزي. الفحص كله داخل متصفحك.">
+<meta property="og:title" content="فاحص قوة كلمة المرور">
+<meta property="og:description" content="شوف كلمة مرورك بعين المخترق، وليش تنكسر. الفحص كله داخل جهازك.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0e0d0c">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta property="og:title" content="فاحص قوة كلمة المرور">
+<meta property="og:description" content="يشرح لك بالعربي ليش كلمة مرورك ضعيفة، والفحص كله في جهازك.">
+<meta property="og:image" content="https://hosam382.github.io/password-checker-ar/og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<main class="wrap">
+  <header class="head">
+    <img src="seal.png" alt="" width="56" height="56">
+    <div>
+      <h1>فاحص قوة كلمة المرور</h1>
+      <p class="sub">يوريك كلمة مرورك بعين المخترق، ويشرح لك ليش تنكسر وكيف تقوّيها.</p>
+    </div>
+  </header>
+
+  <p class="privacy" id="privacy">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/></svg>
+    <span><b>كلمة المرور ما تطلع من جهازك.</b> الفحص كله داخل متصفحك، ما نرسل ولا نحفظ شي، والصفحة نفسها ممنوعة تتصل بالإنترنت.</span>
+  </p>
+
+  <section class="card">
+    <label for="pw" class="lbl">اكتب كلمة مرور تجريبية</label>
+    <div class="pwrow">
+      <input id="pw" type="password" dir="ltr" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" maxlength="128" placeholder="Ahmed@2007" aria-describedby="pwHint">
+      <button id="toggle" class="toggle" type="button" aria-pressed="false" aria-controls="pw">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        <span id="toggleText">إظهار</span>
+      </button>
+    </div>
+    <p id="pwHint" class="hint">نصيحة أمنية: تعوّد ما تكتب كلمة مرورك الحقيقية في أي موقع غير الموقع نفسه، حتى هنا. جرّب كلمة تشبهها.</p>
+  </section>
+
+  <section class="result" aria-labelledby="label">
+    <div id="meter" class="meter" data-score="-1" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    <p id="label" class="verdict">اكتب عشان نفحص</p>
+    <p id="bits" class="bits">القوة تتحسب وأنت تكتب</p>
+    <div class="times">
+      <div class="time">
+        <p class="tlabel">تخمين أونلاين</p>
+        <p class="tsub">100 محاولة بالثانية، عبر صفحة الدخول</p>
+        <p id="tOnline" class="tval">—</p>
+      </div>
+      <div class="time">
+        <p class="tlabel">تخمين أوفلاين</p>
+        <p class="tsub">10 مليار محاولة بالثانية، لو تسرّبت قاعدة البيانات</p>
+        <p id="tOffline" class="tval">—</p>
+      </div>
+    </div>
+    <p id="live" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+  </section>
+
+  <section id="seeCard" class="card" hidden>
+    <h2>كيف يشوفها المخترق</h2>
+    <ol id="parts" class="parts" dir="ltr"></ol>
+    <p id="partsHint" class="hint">كل قطعة ومعها تكلفتها بالبت. القطع الحمراء أنماط معروفة تنخمّن بسرعة، والخضراء حروف عشوائية. الحروف نفسها تبان بس لما تضغط «إظهار».</p>
+  </section>
+
+  <section id="findCard" class="card" hidden>
+    <h2>وش لقينا</h2>
+    <ul id="findings" class="findings"></ul>
+  </section>
+
+  <section id="tipsCard" class="card" hidden>
+    <h2>نصايح لك</h2>
+    <ul id="tips" class="tips"></ul>
+  </section>
+
+  <section class="card gen" aria-labelledby="genTitle">
+    <h2 id="genTitle">عبارة مرور عشوائية</h2>
+    <div class="genrow">
+      <label class="field">
+        <span>عدد الكلمات</span>
+        <select id="words">
+          <option value="4">4 كلمات</option>
+          <option value="5" selected>5 كلمات</option>
+          <option value="6">6 كلمات</option>
+        </select>
+      </label>
+      <button id="gen" class="primary" type="button">ولّد عبارة مرور قوية</button>
+    </div>
+    <output id="phrase" class="phrase empty" for="gen words" dir="ltr">اضغط الزر وتطلع لك عبارة</output>
+    <p id="phraseInfo" class="hint" aria-live="polite"></p>
+    <div id="genActions" class="genactions" hidden>
+      <button id="copy" class="ghost" type="button">انسخها</button>
+      <button id="tryIt" class="ghost" type="button">افحصها فوق</button>
+    </div>
+  </section>
+
+  <section class="card explain" aria-labelledby="whyTitle">
+    <h2 id="whyTitle" class="big">ليش عبارة المرور أقوى؟</h2>
+    <p>برامج التخمين ما تجرب حرف حرف بالترتيب. تبدأ بالأشياء اللي البشر يحبونها: الكلمات المشهورة، والأسماء، والتواريخ، وأرقام الجوالات، والتسلسلات. وبعدين تجرب عليها التعديلات المعروفة: حرف كبير بالأول، رقم بالآخر، و @ بدل a.</p>
+    <div class="compare">
+      <div class="ex">
+        <code dir="ltr">Ahmed@2007</code>
+        <p>تبان معقدة: حرف كبير ورمز وأرقام. بس هي اسم + رمز + سنة.</p>
+        <p id="exA" class="exres"></p>
+      </div>
+      <div class="ex">
+        <code dir="ltr">fresh-onion-Horse-door-market96-ocean</code>
+        <p>6 كلمات اختارها المولّد عشوائياً، مع رقم وفاصل.</p>
+        <p id="exB" class="exres"></p>
+      </div>
+    </div>
+    <p>العبارة تعتمد على العشوائية مو على الحيلة. كل كلمة يختارها الزر من قائمة فيها <b id="nWords">350</b> كلمة، فكل كلمة زيادة تضرب عدد الاحتمالات في <b id="nWords2">350</b> (تقريباً <b id="perWord">8.5</b> بت). ولأنها كلمات، تحفظها كأنها قصة صغيرة.</p>
+    <p>الشرط المهم: العشوائية لازم تكون حقيقية. جملة تختارها بنفسك مثل <code dir="ltr">ana-ahb-alhilal</code> مو عشوائية، والمخترق يجرب الجمل المشهورة. عشان كذا الزر يستخدم <code dir="ltr">crypto.getRandomValues</code>، مولّد الأرقام العشوائية الآمن اللي في متصفحك.</p>
+    <p class="bitnote"><b>وش يعني "بت"؟</b> كل بت زيادة يضاعف عدد الاحتمالات. 10 بت تقريباً ألف احتمال، 20 بت مليون، 40 بت تريليون، و 60 بت مليار مليار.</p>
+  </section>
+
+  <aside class="warn">
+    <b>تنبيه:</b> الأرقام هنا تقريبية وتعليمية، مو ضمان. الحساب يفترض مخترق يعرف الحيل المشهورة، والسرعة الحقيقية تختلف حسب الموقع وطريقة حفظه لكلمات المرور.
+    وحتى أقوى كلمة مرور ما تحميك لو استخدمتها في أكثر من موقع، أو كتبتها في رسالة تصيّد.
+  </aside>
+
+  <footer class="foot">
+    <span>صنعها حسام حسين خدا بخش</span>
+    <a href="https://github.com/hosam382/password-checker-ar">الكود مفتوح على GitHub</a>
+  </footer>
+</main>
+<div id="toast" class="toast" role="status" hidden></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
