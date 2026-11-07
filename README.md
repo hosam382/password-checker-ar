@@ -1,5 +1,5 @@
 # فاحص قوة كلمة المرور | Arabic Password Strength Checker
-**By [Hassam Hussain Khada Bakhsa](https://github.com/hosam382)**
+**By [Hassam](https://github.com/hosam382)**
 
 جرّبها هنا: **https://hosam382.github.io/password-checker-ar/**
 
